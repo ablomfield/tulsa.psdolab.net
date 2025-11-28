@@ -71,7 +71,7 @@ if (isset($_REQUEST["action"])) {
                         echo ("					<tr>\n");
                         echo ("						<td>" . $row["spacename"] . "</td>\n");
                         $deviceurl = "GET https://webexapis.com/v1/xapi/status/?deviceId=" . $row["deviceid"] . "&name=RoomAnalytics.RoomInUse";
-                        echo $deviceurl;
+                        //echo $deviceurl;
                         $getdevice = curl_init($deviceurl);
                         curl_setopt($getdevice, CURLOPT_CUSTOMREQUEST, "GET");
                         curl_setopt($getdevice, CURLOPT_RETURNTRANSFER, true);
