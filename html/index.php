@@ -54,6 +54,7 @@ if (isset($_REQUEST["action"])) {
         <div class="tulsa-body" style="width: 800px">
             <?php
             if ($loggedin) {
+                $officecount = 0;
                 echo ("			<table class=\"default\">\n");
                 echo ("				<thead>\n");
                 echo ("					<tr>\n");
@@ -95,8 +96,32 @@ if (isset($_REQUEST["action"])) {
                         } else {
                             echo ("						<td>False</td>\n");
                         }
-                        echo ("						<td>&nbsp;</td>\n");
-                        echo ("						<td>&nbsp;</td>\n");
+                        $deviceurl = "https://webexapis.com/v1/xapi/status/?deviceId=" . $row["deviceid"] . "&RoomAnalytics.PeopleCount.Current";
+                        //echo $deviceurl;
+                        $getdevice = curl_init($deviceurl);
+                        curl_setopt($getdevice, CURLOPT_CUSTOMREQUEST, "GET");
+                        curl_setopt($getdevice, CURLOPT_RETURNTRANSFER, true);
+                        curl_setopt(
+                            $getdevice,
+                            CURLOPT_HTTPHEADER,
+                            array(
+                                'Content-Type: application/json',
+                                'Authorization: Bearer ' . $accesstoken
+                            )
+                        );
+                        $devicejson = curl_exec($getdevice);
+                        $devicearray = json_decode($devicejson);
+                        //print_r($devicejson);
+                        if (isset($devicearray->result->RoomAnalytics->PeopleCount->Current)) {
+                            if ($devicearray->result->RoomAnalytics->PeopleCount->Current > 0) {
+                                $officecount = $officecount + $devicearray->result->RoomAnalytics->PeopleCount->Current;
+                                echo ("						<td bgcolor=\"green\" align=\"center\">" . $devicearray->result->RoomAnalytics->PeopleCount->Current . "</td>\n");
+                            } else {
+                                echo ("						<td align=\"center\">" . $devicearray->result->RoomAnalytics->PeopleCount->Current . "</td>\n");
+                            }
+                        } else {
+                            echo ("						<td align=\"center\">-</td>\n");
+                        }                        
                         echo ("					</tr>\n");
                     }
                 }
@@ -104,7 +129,7 @@ if (isset($_REQUEST["action"])) {
                 echo ("				<thead>\n");
                 echo ("					<tr>\n");
                 echo ("						<th colspan=\"2\">Total</th>\n");
-                echo ("						<th>X</th>\n");
+                echo ("						<th>$officecount</th>\n");
                 echo ("					</tr>\n");
                 echo ("				</thead>\n");
                 echo ("			</table>\n");
