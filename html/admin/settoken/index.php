@@ -10,7 +10,7 @@ if (isset($_GET['code'])) {
     $oauth_state = $_GET['state'];
     $accessarr = array(
         'grant_type' => 'authorization_code',
-        'redirect_uri' => 'https://keymaster.pnslabs.com/admin/settoken/',
+        'redirect_uri' => 'https://tulsa.psdolab.net/admin/settoken/',
         'client_id' => $client_id,
         'client_secret' => $client_secret,
         'code' => $oauth_code
@@ -33,7 +33,7 @@ if (isset($_GET['code'])) {
     $authexpires = date("Y-m-d H:i:s", time() + $authexpires);
     $refreshexpires = date("Y-m-d H:i:s", time() + $refreshexpires);
 
-    mysqli_query($dbconn,"UPDATE settings SET admintoken='$authtoken', admintokenexpires='$authexpires', adminrefresh='$refreshtoken', adminrefreshexpires='$refreshexpires'");
+    mysqli_query($dbconn,"UPDATE settings SET accesstoken='$authtoken', accessexpires='$authexpires', refreshtoken='$refreshtoken', refreshexpires='$refreshexpires'");
 
     header("Location: /admin/settings/");
     } else {
