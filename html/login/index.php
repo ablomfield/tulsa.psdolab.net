@@ -86,7 +86,6 @@ if (isset($_GET['code'])) {
         $_SESSION["timezone"] = $timezone;
         $_SESSION["authtoken"] = $authtoken;
         $_SESSION["timezone"] = $timezone;
-        mysqli_query($dbconn, "INSERT INTO history (eventdate, eventsource, eventdesc) VALUES(NOW(),'" . $email . "','LOGIN')");
         header("Location: /");
     } else {
         $rowusercheck = mysqli_fetch_assoc($rsusercheck);
@@ -124,7 +123,6 @@ if (isset($_GET['code'])) {
         $_SESSION["authtoken"] = $authtoken;
         $_SESSION["isadmin"] = $isadmin;
         $_SESSION["timezone"] = $timezone;
-        mysqli_query($dbconn, "INSERT INTO history (eventdate, eventsource, eventdesc) VALUES(NOW(),'" . $email . "','LOGIN')");
         header("Location: /");
     }
 } else {
