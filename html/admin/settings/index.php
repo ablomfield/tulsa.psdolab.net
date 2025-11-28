@@ -23,23 +23,12 @@ if ($action == "update") {
     $client_id = $_REQUEST["client_id"];
     $client_secret = $_REQUEST["client_secret"];
     $oauth_url = $_REQUEST["oauth_url"];
-    $bottoken = $_REQUEST["bottoken"];
-    $botpersonid = $_REQUEST["botpersonid"];
-    if (isset($_REQUEST["managerapproval"])) {
-        $managerapproval = $_REQUEST["managerapproval"];
-    } else {
-        $managerapproval = 0;
-    }
 
     $sqlquery = "UPDATE settings SET";
     $sqlquery = $sqlquery . " sitetitle='$sitetitle'";
-    $sqlquery = $sqlquery . ", appversion='$appversion'";
     $sqlquery = $sqlquery . ", client_id='$client_id'";
     $sqlquery = $sqlquery . ", client_secret='$client_secret'";
     $sqlquery = $sqlquery . ", oauth_url='$oauth_url'";
-    $sqlquery = $sqlquery . ", managerapproval='$managerapproval'";
-    $sqlquery = $sqlquery . ", bottoken='$bottoken'";
-    $sqlquery = $sqlquery . ", botpersonid='$botpersonid'";
     mysqli_query($dbconn, $sqlquery);
 }
 
@@ -68,7 +57,7 @@ if ($action == "refresh") {
     $newrefreshtoken = $accessjson->refresh_token;
     $newrefreshexpires = $accessjson->refresh_token_expires_in;
     $newrefreshexpires = date("Y-m-d H:i:s", time() + $newrefreshexpires);
-    $sqlquery = "UPDATE settings SET admintoken = '" . $newaccesstoken . "', admintokenexpires = '" . $newaccessexpires . "', adminrefresh = '" . $newrefreshtoken . "', adminrefreshexpires = '" . $newrefreshexpires . "'";
+    $sqlquery = "UPDATE settings SET accesstoken = '" . $newaccesstoken . "', accessexpires = '" . $newaccessexpires . "', refreshtoken = '" . $newrefreshtoken . "', refreshexpires = '" . $newrefreshexpires . "'";
     $dbconn->query($sqlquery);
 }
 ?>
@@ -125,10 +114,6 @@ if ($action == "refresh") {
                         <td><input type="text" name="sitetitle" size="50" value="<?php echo $rowsetedit["sitetitle"]; ?>"></td>
                     </tr>
                     <tr>
-                        <td>Application Version</td>
-                        <td><input type="text" name="appversion" size="50" value="<?php echo ($rowsetedit["appversion"]); ?>"></td>
-                    </tr>
-                    <tr>
                         <th colspan="2">Integration Settings</th>
                     </tr>
                     <tr>
@@ -144,51 +129,31 @@ if ($action == "refresh") {
                         <td><input type="text" name="oauth_url" size="50" value="<?php echo ($rowsetedit["oauth_url"]); ?>"></td>
                     </tr>
                     <tr>
-                        <th colspan="2">Approval Settings</th>
-                    </tr>
-                    <tr>
-                        <td>Manager Approve</td>
-                        <td><input type="checkbox" name="managerapproval" value="1" <?php if ($rowsetedit["managerapproval"]) {
-                                                                                        echo (" checked");
-                                                                                    } ?>> (If not checked approval space will always be used)</td>
-                    </tr>
-                    <tr>
-                        <th colspan="2">Bot Settings</th>
-                    </tr>
-                    <tr>
-                        <td>Bot Token</td>
-                        <td><input type="text" name="bottoken" size="50" value="<?php echo ($rowsetedit["bottoken"]); ?>"></td>
-                    </tr>
-                    <tr>
-                        <td>Bot Person ID</td>
-                        <td><input type="text" name="botpersonid" size="50" value="<?php echo ($rowsetedit["botpersonid"]); ?>"></td>
-                    </tr>
-                    <tr>
                         <th colspan="2">Token Settings</th>
                     </tr>
                     <tr>
                         <td>Admin Token</td>
-                        <td><input type="text" name="admintoken" size="50" value="<?php echo ($rowsetedit["admintoken"]); ?>" disabled></td>
+                        <td><input type="text" name="admintoken" size="50" value="<?php echo ($rowsetedit["accesstoken"]); ?>" disabled></td>
                     </tr>
                     <?php
                     if ($rowsetedit["admintoken"] <> "") {
                         echo ("                    <tr>\n");
                         echo ("                      <td></td>\n");
-                        echo ("                      <td>Token User: " . webexgetmyname($rowsetedit["admintoken"]) . "</td>\n");
+                        echo ("                      <td>Token User: " . webexgetmyname($rowsetedit["accesstoken"]) . "</td>\n");
                         echo ("                    </tr>\n");
                     }
                     ?>
                     <tr>
                         <td></td>
-                        <td>Expires: <?php echo ($rowsetedit["admintokenexpires"]); ?></td>
+                        <td>Expires: <?php echo ($rowsetedit["accessexpires"]); ?></td>
                     </tr>
                     <tr>
                         <td>Refresh Token</td>
-                        <td><input type="text" name="adminrefresh" size="50" value="<?php echo ($rowsetedit["adminrefresh"]); ?>" disabled></td>
+                        <td><input type="text" name="refreshtoken" size="50" value="<?php echo ($rowsetedit["refreshtoken"]); ?>" disabled></td>
                     </tr>
                     <tr>
                         <td></td>
-                        <td>Expires: <?php echo ($rowsetedit["adminrefreshexpires"]); ?></td>
+                        <td>Expires: <?php echo ($rowsetedit["refreshexpires"]); ?></td>
                     </tr>
                     <tr>
                         <td><input type="submit" value="Update Settings" class="widebutton"></td>
