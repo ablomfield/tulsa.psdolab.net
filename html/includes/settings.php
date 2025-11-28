@@ -22,6 +22,8 @@ $accesstoken  = $rowsettings["accesstoken"];
 $accessexpires  = $rowsettings["accessexpires"];
 $refreshtoken  = $rowsettings["refreshtoken"];
 $refreshexpires = $rowsettings["refreshexpires"];
+$lockdomains = $rowsettings["lockdomains"];
+$selfregistration = $rowsettings["selfregistration"];
 
 // Set Debug
 if (isset($_SESSION["enabledebug"])) {
