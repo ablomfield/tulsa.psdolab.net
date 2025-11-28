@@ -69,7 +69,8 @@ if (isset($_REQUEST["action"])) {
                     // Output data of each row
                     while ($row = $rsdev->fetch_assoc()) {
                         echo ("					<tr>\n");
-                        $deviceurl = "https://webexapis.com/v1/devices/" . $row["deviceid"];
+                        echo ("						<td>" . $row["spacename"] . "</td>\n");
+                        $deviceurl = "GET https://webexapis.com/v1/xapi/status/?deviceId=" . $row["deviceid"] . "&name=RoomAnalytics.RoomInUse";
                         $getdevices = curl_init($deviceurl);
                         curl_setopt($getdevices, CURLOPT_CUSTOMREQUEST, "GET");
                         curl_setopt($getdevices, CURLOPT_RETURNTRANSFER, true);
@@ -84,8 +85,8 @@ if (isset($_REQUEST["action"])) {
                         $devicejson = curl_exec($getdevices);
                         $devicearray = json_decode($devicejson);
                         //print_r($devicearray);
-                        if (isset($devicearray->id)) {
-                            echo ("						<td>" . $devicearray->displayName . "</td>\n");
+                        if (isset($devicearray->result->RoomAnalytics->RoomInUse)) {
+                            echo ("						<td>" . $devicearray->result->RoomAnalytics->RoomInUse . "</td>\n");
                         } else {
                             echo ("						<td>&nbsp;</td>\n");
                         }
