@@ -85,7 +85,7 @@ if (isset($_REQUEST["action"])) {
                         );
                         $devicejson = curl_exec($getdevice);
                         $devicearray = json_decode($devicejson);
-                        print_r($getdevice);
+                        print_r($devicejson);
                         if (isset($devicearray->result->RoomAnalytics->RoomInUse)) {
                             echo ("						<td>" . $devicearray->result->RoomAnalytics->RoomInUse . "</td>\n");
                         } else {
