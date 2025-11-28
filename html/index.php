@@ -10,7 +10,7 @@ include($_SERVER['DOCUMENT_ROOT'] . "/includes/settings.php");
 // Retrieve and Perform Actions
 if (isset($_REQUEST["action"])) {
     $action = $_REQUEST["action"];
-  } else {
+} else {
     $action = "";
 }
 ?>
@@ -49,16 +49,23 @@ if (isset($_REQUEST["action"])) {
         <div class="tulsa-menu">
             <?php if ($userpkid != "") {
                 include $_SERVER['DOCUMENT_ROOT'] . "/includes/menu.php";
-            }?>
+            } ?>
         </div>
         <div class="tulsa-body" style="width: 800px">
-          <a href="<?php echo ($oauth_url); ?>">
-            <img width="400" src="/images/signin.png" alt="Sign In with Webex" />
-          </a>
+            <?php
+            if ($loggedin) {
+                echo("Stuff goes here...<br>\n");
+            } else {
+                echo ("          <a href=\"" . $oauth_url . "\">\n");
+                echo ("            <img width=\"400\" src=\"/images/signin.png\" alt=\"Sign In with Webex\" />\n");
+                echo ("          </a>\n");
+            }
+            ?>
         </div>
         <div class="tulsa-footer">
             <?php include $_SERVER['DOCUMENT_ROOT'] . "/includes/footer.php"; ?>
         </div>
     </div>
 </body>
+
 </html>
