@@ -7,9 +7,7 @@
     echo ("      </button>\n");
     echo ("      <div class=\"dropdown-content\">\n");
     echo ("        <a href=\"/admin/users/\">Users</a>\n");
-    echo ("        <a href=\"/admin/roles/\">Roles</a>\n");
     echo ("        <a href=\"/admin/settings/\">Settings</a>\n");
-    echo ("        <a href=\"/admin/sync/\">Sync Status</a>\n");
     echo ("      </div>\n");
     echo ("    </div>\n");
   }
