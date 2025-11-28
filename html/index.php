@@ -13,12 +13,6 @@ if (isset($_REQUEST["action"])) {
   } else {
     $action = "";
 }
-
-if (isset($userpkid)) {
-    if ($userpkid <> "") {
-        header("Location: /people/", true, 302);
-    }
-}
 ?>
 <!DOCTYPE html>
 <html lang="en">
