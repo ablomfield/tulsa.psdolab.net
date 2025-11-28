@@ -117,7 +117,7 @@ if (isset($_REQUEST["action"])) {
                                 $officecount = $officecount + $devicearray->result->RoomAnalytics->PeopleCount->Current;
                                 echo ("						<td bgcolor=\"green\" align=\"center\">" . $devicearray->result->RoomAnalytics->PeopleCount->Current . "</td>\n");
                             } else {
-                                echo ("						<td align=\"center\">" . $devicearray->result->RoomAnalytics->PeopleCount->Current . "</td>\n");
+                                echo ("						<td align=\"center\">0</td>\n");
                             }
                         } else {
                             echo ("						<td align=\"center\">-</td>\n");
