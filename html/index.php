@@ -72,20 +72,20 @@ if (isset($_REQUEST["action"])) {
                         echo ("						<td>" . $row["spacename"] . "</td>\n");
                         $deviceurl = "GET https://webexapis.com/v1/xapi/status/?deviceId=" . $row["deviceid"] . "&name=RoomAnalytics.RoomInUse";
                         echo $deviceurl;
-                        $getdevices = curl_init($deviceurl);
-                        curl_setopt($getdevices, CURLOPT_CUSTOMREQUEST, "GET");
-                        curl_setopt($getdevices, CURLOPT_RETURNTRANSFER, true);
+                        $getdevice = curl_init($deviceurl);
+                        curl_setopt($getdevice, CURLOPT_CUSTOMREQUEST, "GET");
+                        curl_setopt($getdevice, CURLOPT_RETURNTRANSFER, true);
                         curl_setopt(
-                            $getdevices,
+                            $getdevice,
                             CURLOPT_HTTPHEADER,
                             array(
                                 'Content-Type: application/json',
                                 'Authorization: Bearer ' . $accesstoken
                             )
                         );
-                        $devicejson = curl_exec($getdevices);
+                        $devicejson = curl_exec($getdevice);
                         $devicearray = json_decode($devicejson);
-                        print_r($devicearray);
+                        print_r($devicejson);
                         if (isset($devicearray->result->RoomAnalytics->RoomInUse)) {
                             echo ("						<td>" . $devicearray->result->RoomAnalytics->RoomInUse . "</td>\n");
                         } else {
