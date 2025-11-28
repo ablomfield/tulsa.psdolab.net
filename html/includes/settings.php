@@ -18,8 +18,10 @@ $client_id = $rowsettings["client_id"];
 $client_secret = $rowsettings["client_secret"];
 $integration_id = $rowsettings["integration_id"];
 $oauth_url = $rowsettings["oauth_url"];
-$admintoken  = $rowsettings["admintoken"];
-$adminrefresh  = $rowsettings["adminrefresh"];
+$accesstoken  = $rowsettings["accesstoken"];
+$accessexpires  = $rowsettings["accessexpires"];
+$refreshtoken  = $rowsettings["refreshtoken"];
+$refreshexpires = $rowsettings["refreshexpires"];
 
 // Set Debug
 if (isset($_SESSION["enabledebug"])) {
