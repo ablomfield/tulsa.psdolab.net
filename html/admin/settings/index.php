@@ -37,7 +37,7 @@ if ($action == "refresh") {
         'grant_type' => 'refresh_token',
         'client_id' => $client_id,
         'client_secret' => $client_secret,
-        'refresh_token' => $adminrefresh
+        'refresh_token' => $refreshtoken
     );
     $accessenc = http_build_query($accessarr);
     $getaccess = curl_init();
