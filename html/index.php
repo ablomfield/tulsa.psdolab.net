@@ -88,7 +88,7 @@ if (isset($_REQUEST["action"])) {
                         if (isset($devicearray->result->RoomAnalytics->RoomInUse)) {
                             echo ("						<td>" . $devicearray->result->RoomAnalytics->RoomInUse . "</td>\n");
                         } else {
-                            echo ("						<td>&nbsp;</td>\n");
+                            echo ("						<td>Nope</td>\n");
                         }
                         echo ("						<td>&nbsp;</td>\n");
                         echo ("						<td>&nbsp;</td>\n");
