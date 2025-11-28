@@ -54,7 +54,54 @@ if (isset($_REQUEST["action"])) {
         <div class="tulsa-body" style="width: 800px">
             <?php
             if ($loggedin) {
-                echo("Stuff goes here...<br>\n");
+                echo ("			<table class=\"default\">\n");
+                echo ("				<thead>\n");
+                echo ("					<tr>\n");
+                echo ("						<th>Room</th>\n");
+                echo ("						<th>In Use</th>\n");
+                echo ("						<th>Count</th>\n");
+                echo ("					</tr>\n");
+                echo ("				</thead>\n");
+                echo ("				<tbody>\n");
+                $devsql = "SELECT deviceid, spacename FROM spaces";
+                $rsdev = $dbconn->query($devsql);
+                if ($rsdev->num_rows > 0) {
+                    // Output data of each row
+                    while ($row = $rsdev->fetch_assoc()) {
+                        echo ("					<tr>\n");
+                        $deviceurl = "https://webexapis.com/v1/devices/" . $row["deviceid"];
+                        $getdevices = curl_init($deviceurl);
+                        curl_setopt($getdevices, CURLOPT_CUSTOMREQUEST, "GET");
+                        curl_setopt($getdevices, CURLOPT_RETURNTRANSFER, true);
+                        curl_setopt(
+                            $getdevices,
+                            CURLOPT_HTTPHEADER,
+                            array(
+                                'Content-Type: application/json',
+                                'Authorization: Bearer ' . $accesstoken
+                            )
+                        );
+                        $devicejson = curl_exec($getdevices);
+                        $devicearray = json_decode($devicejson);
+                        //print_r($devicearray);
+                        if (isset($devicearray->id)) {
+                            echo ("						<td>" . $devicearray->displayName . "</td>\n");
+                        } else {
+                            echo ("						<td>&nbsp;</td>\n");
+                        }
+                        echo ("						<td>&nbsp;</td>\n");
+                        echo ("						<td>&nbsp;</td>\n");
+                        echo ("					</tr>\n");
+                    }
+                }
+                echo ("				</tbody>\n");
+                echo ("				<thead>\n");
+                echo ("					<tr>\n");
+                echo ("						<th colspan=\"2\">Total</th>\n");
+                echo ("						<th>X</th>\n");
+                echo ("					</tr>\n");
+                echo ("				</thead>\n");
+                echo ("			</table>\n");
             } else {
                 echo ("          <a href=\"" . $oauth_url . "\">\n");
                 echo ("            <img width=\"400\" src=\"/images/signin.png\" alt=\"Sign In with Webex\" />\n");
