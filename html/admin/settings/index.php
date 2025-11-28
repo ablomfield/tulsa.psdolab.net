@@ -133,10 +133,10 @@ if ($action == "refresh") {
                     </tr>
                     <tr>
                         <td>Admin Token</td>
-                        <td><input type="text" name="admintoken" size="50" value="<?php echo ($rowsetedit["accesstoken"]); ?>" disabled></td>
+                        <td><input type="text" name="accesstoken" size="50" value="<?php echo ($rowsetedit["accesstoken"]); ?>" disabled></td>
                     </tr>
                     <?php
-                    if ($rowsetedit["admintoken"] <> "") {
+                    if ($rowsetedit["accesstoken"] <> "") {
                         echo ("                    <tr>\n");
                         echo ("                      <td></td>\n");
                         echo ("                      <td>Token User: " . webexgetmyname($rowsetedit["accesstoken"]) . "</td>\n");
