@@ -20,6 +20,7 @@ if (isset($_REQUEST["action"])) {
 <head>
     <title><?php echo ($sitetitle); ?></title>
     <link rel="icon" type="image/png" href="/images/tulsa.png">
+    <link rel="apple-touch-icon" href="/images/tulsa.png">
     <link rel="stylesheet" href="/css/tulsa.css">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
