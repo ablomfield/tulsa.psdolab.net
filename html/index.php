@@ -110,7 +110,6 @@ if (isset($_REQUEST["action"])) {
                             )
                         );
                         $devicejson = curl_exec($getdevice);
-                        print_r($devicejson);
                         $devicearray = json_decode($devicejson);
                         //print_r($devicejson);
                         if (isset($devicearray->result->RoomAnalytics->PeopleCount->Current)) {
