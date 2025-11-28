@@ -87,9 +87,13 @@ if (isset($_REQUEST["action"])) {
                         $devicearray = json_decode($devicejson);
                         //print_r($devicejson);
                         if (isset($devicearray->result->RoomAnalytics->RoomInUse)) {
-                            echo ("						<td>" . $devicearray->result->RoomAnalytics->RoomInUse . "</td>\n");
+                            if ($devicearray->result->RoomAnalytics->RoomInUse) {
+                                echo ("						<td bgcolor=\"green\">" . $devicearray->result->RoomAnalytics->RoomInUse . "</td>\n");
+                            } else {
+                                echo ("						<td>" . $devicearray->result->RoomAnalytics->RoomInUse . "</td>\n");
+                            }
                         } else {
-                            echo ("						<td>Nope</td>\n");
+                            echo ("						<td>False</td>\n");
                         }
                         echo ("						<td>&nbsp;</td>\n");
                         echo ("						<td>&nbsp;</td>\n");
