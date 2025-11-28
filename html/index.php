@@ -96,7 +96,7 @@ if (isset($_REQUEST["action"])) {
                         } else {
                             echo ("						<td>False</td>\n");
                         }
-                        $deviceurl = "https://webexapis.com/v1/xapi/status/?deviceId=" . $row["deviceid"] . "&RoomAnalytics.PeopleCount.Current";
+                        $deviceurl = "https://webexapis.com/v1/xapi/status/?deviceId=" . $row["deviceid"] . "&name=RoomAnalytics.PeopleCount.Current";
                         //echo $deviceurl;
                         $getdevice = curl_init($deviceurl);
                         curl_setopt($getdevice, CURLOPT_CUSTOMREQUEST, "GET");
