@@ -2,6 +2,7 @@
 if (isset($_SESSION["userpkid"])) {
   $userpkid = $_SESSION["userpkid"];
   $email = $_SESSION["email"];
+  $loggedin = true;
 } else {
   if ($_SERVER['REQUEST_URI'] != "/" && $_SERVER['REQUEST_URI'] != "/index.php" && substr($_SERVER['REQUEST_URI'],0,13) != "/accessdenied") {
     header("Location: /", true, 302);
@@ -12,6 +13,7 @@ if (isset($_SESSION["userpkid"])) {
     $displayname = "";
     $timezone = "America/Chicago";
   }
+  $loggedin = false;
 }
 
 if (isset($_SESSION["isadmin"])) {
