@@ -1,18 +1,8 @@
 <?php
 session_start();
 
-// Check Logged In
-include($_SERVER['DOCUMENT_ROOT'] . "/includes/checkaccess.php");
-
 // Retrieve Settings and Functions
 include($_SERVER['DOCUMENT_ROOT'] . "/includes/settings.php");
-
-// Retrieve and Perform Actions
-if (isset($_REQUEST["action"])) {
-    $action = $_REQUEST["action"];
-} else {
-    $action = "";
-}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -39,7 +29,7 @@ if (isset($_REQUEST["action"])) {
 <body>
     <div class="parent">
         <div class="tulsa-logo">
-            <a href="/loginpage/"><?php include $_SERVER['DOCUMENT_ROOT'] . "/includes/logo.php"; ?></a>
+            <?php include $_SERVER['DOCUMENT_ROOT'] . "/includes/logo.php"; ?>
         </div>
         <div class="tulsa-title">
             <?php echo ($sitetitle); ?>
