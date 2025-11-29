@@ -39,7 +39,7 @@ if (isset($_REQUEST["action"])) {
 <body>
     <div class="parent">
         <div class="tulsa-logo">
-            <a href="/loginpage/"><?php include $_SERVER['DOCUMENT_ROOT'] . "/includes/logo.php"; ?></a>
+            <?php include $_SERVER['DOCUMENT_ROOT'] . "/includes/logo.php"; ?>
         </div>
         <div class="tulsa-title">
             <?php echo ($sitetitle); ?>
