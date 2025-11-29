@@ -3,6 +3,7 @@ session_start();
 
 // Retrieve Settings and Functions
 include($_SERVER['DOCUMENT_ROOT'] . "/includes/settings.php");
+$loggedin = false;
 ?>
 <!DOCTYPE html>
 <html lang="en">
