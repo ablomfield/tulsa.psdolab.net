@@ -36,8 +36,10 @@ if ($rsdev->num_rows > 0) {
         //print_r($devicejson);
         if (isset($devicearray->result->RoomAnalytics->RoomInUse)) {
             if ($devicearray->result->RoomAnalytics->RoomInUse == "True") {
+                $roominuse = true;
                 echo ("						<td bgcolor=\"green\">" . $devicearray->result->RoomAnalytics->RoomInUse . "</td>\n");
             } else {
+                $roominuse = true;
                 echo ("						<td>" . $devicearray->result->RoomAnalytics->RoomInUse . "</td>\n");
             }
         } else {
@@ -66,6 +68,9 @@ if ($rsdev->num_rows > 0) {
             } else {
                 echo ("						<td align=\"center\">0</td>\n");
             }
+        } elseif ($roominuse) {
+            $officecount = $officecount + 1;
+            echo ("						<td bgcolor=\"green\" align=\"center\">1</td>\n");
         } else {
             echo ("						<td align=\"center\">-</td>\n");
         }
