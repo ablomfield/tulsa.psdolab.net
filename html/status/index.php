@@ -39,7 +39,7 @@ if ($rsdev->num_rows > 0) {
                 $roominuse = true;
                 echo ("						<td bgcolor=\"green\">" . $devicearray->result->RoomAnalytics->RoomInUse . "</td>\n");
             } else {
-                $roominuse = true;
+                $roominuse = false;
                 echo ("						<td>" . $devicearray->result->RoomAnalytics->RoomInUse . "</td>\n");
             }
         } else {
