@@ -1,62 +1,67 @@
 <?php
-// Retrieve Settings and Functions
 include($_SERVER['DOCUMENT_ROOT'] . "/includes/settings.php");
 
 $officecount = 0;
+$devices = [];
+$requests = [];
 
 // ----------------------------------------
 // Load devices
 // ----------------------------------------
-$devices = [];
-$devsql = "SELECT deviceid, spacename FROM spaces";
-$rsdev = $dbconn->query($devsql);
-
+$rsdev = $dbconn->query("SELECT deviceid, spacename FROM spaces");
 while ($row = $rsdev->fetch_assoc()) {
     $devices[$row['deviceid']] = [
         'spacename' => $row['spacename'],
-        'inuse'     => false,
-        'count'     => null
+        'inuse' => false,
+        'count' => null
     ];
 }
 
 // ----------------------------------------
-// Prepare parallel cURL calls
+// Init multi-curl
 // ----------------------------------------
 $mh = curl_multi_init();
-$map = [];
 
 $headers = [
     'Content-Type: application/json',
     'Authorization: Bearer ' . $accesstoken
 ];
 
+// ----------------------------------------
+// Create requests
+// ----------------------------------------
 foreach ($devices as $deviceid => $_) {
 
-    // Room In Use
-    $chInUse = curl_init(
-        "https://webexapis.com/v1/xapi/status/?deviceId={$deviceid}&name=RoomAnalytics.RoomInUse"
-    );
-    curl_setopt_array($chInUse, [
-        CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_HTTPHEADER     => $headers
-    ]);
-    curl_multi_add_handle($mh, $chInUse);
-    $map[spl_object_id($chInUse)] = ['deviceid' => $deviceid, 'type' => 'inuse'];
+    $metrics = [
+        'inuse' => 'RoomAnalytics.RoomInUse',
+        'count' => 'RoomAnalytics.PeopleCount.Current'
+    ];
 
-    // People Count
-    $chCount = curl_init(
-        "https://webexapis.com/v1/xapi/status/?deviceId={$deviceid}&name=RoomAnalytics.PeopleCount.Current"
-    );
-    curl_setopt_array($chCount, [
-        CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_HTTPHEADER     => $headers
-    ]);
-    curl_multi_add_handle($mh, $chCount);
-    $map[spl_object_id($chCount)] = ['deviceid' => $deviceid, 'type' => 'count'];
+    foreach ($metrics as $type => $metric) {
+
+        $ch = curl_init(
+            "https://webexapis.com/v1/xapi/status/?deviceId={$deviceid}&name={$metric}"
+        );
+
+        curl_setopt_array($ch, [
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_HTTPHEADER => $headers,
+            CURLOPT_TIMEOUT => 10
+        ]);
+
+        curl_multi_add_handle($mh, $ch);
+
+        // Store metadata separately
+        $requests[] = [
+            'handle'   => $ch,
+            'deviceid' => $deviceid,
+            'type'     => $type
+        ];
+    }
 }
 
 // ----------------------------------------
-// Execute all requests
+// Execute in parallel
 // ----------------------------------------
 do {
     curl_multi_exec($mh, $running);
@@ -66,94 +71,61 @@ do {
 // ----------------------------------------
 // Process responses
 // ----------------------------------------
-foreach ($map as $oid => $meta) {
+foreach ($requests as $req) {
 
-    foreach ($map as $oid => $meta) {
-        // Find the handle by object id
-        foreach (curl_multi_info_read($mh) ?? [] as $info) {
-            $ch = $info['handle'];
+    $response = curl_multi_getcontent($req['handle']);
+    $json = json_decode($response);
+
+    if ($req['type'] === 'inuse') {
+        if (($json->result->RoomAnalytics->RoomInUse ?? '') === 'True') {
+            $devices[$req['deviceid']]['inuse'] = true;
         }
     }
-}
 
-foreach ($map as $oid => $meta) {
-    // nothing here; handled below
-}
-
-foreach ($map as $oid => $meta) {
-    // iterate handles properly
-}
-
-foreach ($map as $oid => $meta) {
-    // placeholder
-}
-
-// Correct handle iteration
-foreach ($map as $oid => $meta) {
-    // no-op
-}
-
-// ACTUAL HANDLE LOOP
-foreach ($map as $oid => $meta) {
-    // handled via curl_multi_getcontent below
-}
-
-foreach ($map as $oid => $meta) {
-    // placeholder
-}
-
-// Final correct loop
-foreach ($map as $oid => $meta) {
-    foreach ($map as $oid2 => $meta2) {
-        // noop
+    if ($req['type'] === 'count') {
+        if (isset($json->result->RoomAnalytics->PeopleCount->Current)) {
+            $devices[$req['deviceid']]['count'] =
+                (int)$json->result->RoomAnalytics->PeopleCount->Current;
+        }
     }
+
+    curl_multi_remove_handle($mh, $req['handle']);
+    curl_close($req['handle']);
 }
 
+curl_multi_close($mh);
+
 // ----------------------------------------
-// Collect results safely
+// Render table
 // ----------------------------------------
-foreach ($map as $oid => $meta) {
-    // Retrieve handle by object id
-    foreach (curl_multi_info_read($mh) ?? [] as $info) {
-        $ch = $info['handle'];
+echo '<table class="default">
+<thead>
+<tr><th>Room</th><th>In Use</th><th>Count</th></tr>
+</thead><tbody>';
+
+foreach ($devices as $device) {
+
+    echo "<tr><td>{$device['spacename']}</td>";
+
+    echo $device['inuse']
+        ? '<td bgcolor="green">True</td>'
+        : '<td>False</td>';
+
+    if ($device['count'] > 0) {
+        $officecount += $device['count'];
+        echo "<td bgcolor=\"green\" align=\"center\">{$device['count']}</td>";
+    } elseif ($device['inuse']) {
+        $officecount++;
+        echo '<td bgcolor="green" align="center">1</td>';
+    } else {
+        echo '<td align="center">-</td>';
     }
+
+    echo '</tr>';
 }
 
-foreach ($map as $oid => $meta) {
-    // handled below
-}
-
-// Correct approach: iterate over all handles
-foreach ($map as $oid => $meta) {
-    // nothing
-}
-
-foreach ($map as $oid => $meta) {
-    // noop
-}
-
-// FINAL, CLEAN HANDLE ITERATION
-foreach ($map as $oid => $meta) {
-    // handled via stored handles
-}
-
-// ----------------------------------------
-// Proper cleanup & data extraction
-// ----------------------------------------
-foreach ($map as $oid => $meta) {
-    // We stored the handles in the map keys, retrieve via reflection
-}
-
-foreach ($map as $oid => $meta) {
-    // Skip
-}
-
-// --- ACTUAL IMPLEMENTATION ---
-foreach ($map as $oid => $meta) {
-    // Retrieve handle from object id
-    foreach (curl_multi_info_read($mh) ?? [] as $info) {
-        $ch = $info['handle'];
-    }
-}
-
-// -------
+echo "</tbody>
+<thead>
+<tr><th colspan=\"2\">Total</th><th>{$officecount}</th></tr>
+</thead>
+</table>";
